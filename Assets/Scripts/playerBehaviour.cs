@@ -8,20 +8,24 @@ public class playerBehaviour : MonoBehaviour
     //Vector2 neoPos;
 
     public GameObject spell;
+    public GameObject knightSpawn;
 
+    public float cooldownAmount;
     public float speed;
     float xVel;
     float yVel;
     float div;
-
+    float cooldown;
 
     void Start()
     {
         div = 1;
+        cooldown = cooldownAmount;
     }
 
     void Update()
     {
+        cooldown -= Time.deltaTime;
 
         if (Input.GetAxis("Horizontal") > 0) { xVel = 1; }
         else if (Input.GetAxis("Horizontal" ) < 0) { xVel = -1; }
@@ -36,7 +40,11 @@ public class playerBehaviour : MonoBehaviour
         { div = 1.3f; }
         else { div = 1; }
 
-        if (Input.GetMouseButtonDown(0)) { Instantiate(spell); }
+        if (Input.GetMouseButtonDown(0) && knightSpawn.GetComponent<enemyCreation>().hover <= 0 && Mathf.Ceil(cooldown) <= 0)
+        {
+            Instantiate(spell);
+            cooldown = cooldownAmount;
+        }
 
         //Debug.Log("X: " + xVel + " Y: " + yVel);
         //Debug.Log(keyCount);
@@ -45,6 +53,6 @@ public class playerBehaviour : MonoBehaviour
     void FixedUpdate()
     {
         pos = transform.position;
-        transform.position = new Vector2(pos.x + speed / 100 * xVel / div, pos.y + speed / 100 * yVel / div);
+        transform.position = new Vector2(Mathf.Clamp(pos.x + speed / 100 * xVel / div, -11.72441f, 11.72441f), Mathf.Clamp(pos.y + speed / 100 * yVel / div, -4.509478f, 4.509478f));
     }
 }

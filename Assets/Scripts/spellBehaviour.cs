@@ -22,20 +22,32 @@ public class spellBehaviour : MonoBehaviour
 
     void FixedUpdate()
     {
+        past = transform.position;
+        transform.position = Vector2.MoveTowards(transform.position, mPos, speed);
         current = transform.position;
 
-        if (check) { transform.position = Vector2.MoveTowards(transform.position, mPos, speed); }
-        
-        past = transform.position;
-
-        if (current != past) { increment = past - current; }
+        if (current != past) { increment = current - past; }
         else
         {
+            //transform.position += increment;
+            mPos += increment * 1000;
+
+            if (check)
+            {
+                past = transform.position;
+                transform.position = Vector2.MoveTowards(transform.position, mPos, speed);
+                current = transform.position;
+            }
+
             check = false;
-            transform.position += increment;
         }
 
-        print(past - current);
-        print(increment);
+        print(new Vector2(current.x, current.y) - new Vector2(past.x, past.y));
+        //print(increment);
+    }
+
+    void OnBecameInvisible()
+    {
+        Destroy(gameObject);
     }
 }

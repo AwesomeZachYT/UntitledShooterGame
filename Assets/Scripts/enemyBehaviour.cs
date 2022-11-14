@@ -19,10 +19,8 @@ public class enemyBehaviour : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         player = GameObject.Find("Player");
-        drag = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         t++;
@@ -41,6 +39,15 @@ public class enemyBehaviour : MonoBehaviour
         {
             rigidbody.simulated = true;
             drag = false;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Spell")
+        {
+            Destroy(gameObject);
+            Destroy(collision.gameObject);
         }
     }
 }
